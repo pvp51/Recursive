@@ -2,14 +2,15 @@ package assignment2;
 
 public class TreeType {
 	
-	private int data;
+	private char data;
     private TreeType left;
     private TreeType right;
 	
-	public int getData() {
+	
+	public char getData() {
 		return data;
 	}
-	public void setData(int data) {
+	public void setData(char data) {
 		this.data = data;
 	}
 	public TreeType getLeft() {
