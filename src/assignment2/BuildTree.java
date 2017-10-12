@@ -30,22 +30,21 @@ public class BuildTree {
 		input = scan.nextLine();
 		System.out.println("The input expression: "+input);*/
 		
-		finalTree = expression(finalTree);
+		finalTree = expression();
 		System.out.println(finalTree.toString());
 		
 
 	}
 	
-	private static TreeType expression(TreeType tree){
+	private static TreeType expression(){
 		TreeType termTree = new TreeType();
-		termTree = term(termTree);
+		termTree = term();
 		TreeType expressionTree = new TreeType();
-		expressionTree = tree;
 		
 		if(token == '+' ){			
 			TreeType expression2Tree = new TreeType();
 			getToken();
-			expression2Tree = expression(expression2Tree);
+			expression2Tree = expression();
 			expressionTree.setData('+');
 			expressionTree.setLeft(termTree);
 			expressionTree.setRight(expression2Tree);				
@@ -53,7 +52,7 @@ public class BuildTree {
 		else if(token == '-'){			
 			TreeType expression2Tree = new TreeType();
 			getToken();
-			expression2Tree = expression(expression2Tree);
+			expression2Tree = expression();
 			expressionTree.setData('-');
 			expressionTree.setLeft(termTree);
 			expressionTree.setRight(expression2Tree);				
@@ -64,15 +63,14 @@ public class BuildTree {
 		return expressionTree;		
 	}
 	
-	private static TreeType term(TreeType tree){
+	private static TreeType term(){
 		TreeType factorTree = new TreeType();
-		factorTree = factor(factorTree);
+		factorTree = factor();
 		TreeType termTree = new TreeType();
-		termTree = tree;
 		if(token == '*'){			
 			TreeType term2Tree = new TreeType();
 			getToken();
-			term2Tree = term(term2Tree);
+			term2Tree = term();
 			termTree.setData('*');
 			termTree.setLeft(factorTree);
 			termTree.setRight(term2Tree);				
@@ -80,7 +78,7 @@ public class BuildTree {
 		else if(token == '/'){			
 			TreeType term2Tree = new TreeType();
 			getToken();
-			term2Tree = term(term2Tree);
+			term2Tree = term();
 			termTree.setData('/');
 			termTree.setLeft(factorTree);
 			termTree.setRight(term2Tree);				
@@ -92,11 +90,11 @@ public class BuildTree {
 		return termTree;		
 	}
 	
-	private static TreeType factor(TreeType tree){
+	private static TreeType factor(){
 		TreeType digitTree = new TreeType();
-		digitTree = digit(digitTree);
+		digitTree = digit();
 		TreeType factorTree= new TreeType();
-		factorTree = tree;
+
 		
 		if(Character.isDigit(token)){			
 			//getToken();
@@ -106,12 +104,11 @@ public class BuildTree {
 		return factorTree;		
 	}
 	
-	private static TreeType digit(TreeType tree){
+	private static TreeType digit(){
 		TreeType digitTree = new TreeType();
-		digitTree = tree;
 		
 		digitTree.setData(token);
-		getToken();
+		//getToken();
 		digitTree.setLeft(null);
 		digitTree.setRight(null);
 		return digitTree;		
