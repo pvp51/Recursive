@@ -24,16 +24,15 @@ public class BuildTree {
     <factor> ::= <digit> | ( <expression> )
     <digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 */
 	public static void main(String[] args) {
-		Double result;
-		input = "3*5+7";		
-		getToken();		
-		TreeType finalTree = new TreeType();
-
-		/*String output;		
+		Double result = 0.0;
+				
+		@SuppressWarnings("resource")
 		Scanner scan = new Scanner(System.in);		
 		System.out.println("Enter the input expression: ");
 		input = scan.nextLine();
-		System.out.println("The input expression: "+input);*/
+		System.out.println("The input expression: "+input);		
+		getToken();		
+		TreeType finalTree = new TreeType();
 
 		finalTree = expression();
 		result = solveExpression(finalTree);
@@ -43,7 +42,7 @@ public class BuildTree {
 	private static Double solveExpression(TreeType finalTree) {
 
 		if(finalTree!=null){
-			if(finalTree.getLeft()!=null && finalTree.getLeft()!=null){
+			if(finalTree.getLeft()!=null && finalTree.getRight()!=null){
 				double rightChild = solveExpression(finalTree.getRight());
 				double leftChild = solveExpression(finalTree.getLeft());				
 				if(finalTree.getData() == '+' ){				
@@ -57,16 +56,11 @@ public class BuildTree {
 				}
 				return 0.0d;
 			}
-			try {
-				return (double)finalTree.getData();
-			} catch (NumberFormatException ex) {
-				return 0.0d;
+			else if(Character.isDigit(finalTree.getData())){
+				return (double) Character.digit(finalTree.getData(), 10);
 			}
-			/*else if(Character.isDigit(op)){
-				return (double)op;
-			}*/
 		}
-		return 0.0d;
+		return 0.0;
 	}
 
 	private static TreeType expression(){
