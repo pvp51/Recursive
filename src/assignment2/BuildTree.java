@@ -17,7 +17,6 @@ public class BuildTree {
 			token = '#';
 			return token;
 		}
-
 	}
 
 	/*<expression> ::= <term> + <expression> | <term> - <expression> | <term>
@@ -25,8 +24,8 @@ public class BuildTree {
     <factor> ::= <digit> | ( <expression> )
     <digit> ::= 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 */
 	public static void main(String[] args) {
-
-		input = "(3*5)+7";		
+		Double result;
+		input = "3*5+7";		
 		getToken();		
 		TreeType finalTree = new TreeType();
 
@@ -37,9 +36,37 @@ public class BuildTree {
 		System.out.println("The input expression: "+input);*/
 
 		finalTree = expression();
-		System.out.println(finalTree.toString());
+		result = solveExpression(finalTree);
+		System.out.println(result);
+	}
 
+	private static Double solveExpression(TreeType finalTree) {
 
+		if(finalTree!=null){
+			if(finalTree.getLeft()!=null && finalTree.getLeft()!=null){
+				double rightChild = solveExpression(finalTree.getRight());
+				double leftChild = solveExpression(finalTree.getLeft());				
+				if(finalTree.getData() == '+' ){				
+					return leftChild + rightChild;
+				}else if(finalTree.getData() == '-' ){
+					return leftChild - rightChild;
+				}else if(finalTree.getData() == '*'){
+					return leftChild * rightChild;
+				}else if(finalTree.getData() == '/'){
+					return leftChild / rightChild;
+				}
+				return 0.0d;
+			}
+			try {
+				return (double)finalTree.getData();
+			} catch (NumberFormatException ex) {
+				return 0.0d;
+			}
+			/*else if(Character.isDigit(op)){
+				return (double)op;
+			}*/
+		}
+		return 0.0d;
 	}
 
 	private static TreeType expression(){
@@ -50,19 +77,12 @@ public class BuildTree {
 		if(token == '#'){
 			return expressionTree = termTree;
 		}
-		else if(token == '+' ){			
+		else if(token == '+' || token == '-'){	
+			char temp = token;
 			TreeType expression2Tree = new TreeType();
 			getToken();
 			expression2Tree = expression();
-			expressionTree.setData('+');
-			expressionTree.setLeft(termTree);
-			expressionTree.setRight(expression2Tree);				
-		}
-		else if(token == '-'){			
-			TreeType expression2Tree = new TreeType();
-			getToken();
-			expression2Tree = expression();
-			expressionTree.setData('-');
+			expressionTree.setData(temp);
 			expressionTree.setLeft(termTree);
 			expressionTree.setRight(expression2Tree);				
 		}
@@ -79,19 +99,12 @@ public class BuildTree {
 		if(token == '#'){
 			return termTree = factorTree;
 		}
-		else if(token == '*'){			
+		else if(token == '*' || token == '/'){		
+			char temp = token;
 			TreeType term2Tree = new TreeType();
 			getToken();
 			term2Tree = term();
-			termTree.setData('*');
-			termTree.setLeft(factorTree);
-			termTree.setRight(term2Tree);				
-		}
-		else if(token == '/'){			
-			TreeType term2Tree = new TreeType();
-			getToken();
-			term2Tree = term();
-			termTree.setData('/');
+			termTree.setData(temp);
 			termTree.setLeft(factorTree);
 			termTree.setRight(term2Tree);				
 		}
@@ -103,16 +116,15 @@ public class BuildTree {
 	}
 
 	private static TreeType factor(){
-		TreeType digitTree = new TreeType();
-		digitTree = digit();
 		TreeType factorTree= new TreeType();
 
-		if(token == '#'){
-			factorTree = digitTree ;
-			return factorTree;
-		}
-		else if(Character.isDigit(token)){			
-			//getToken();
+		if(Character.isDigit(token)){	
+			TreeType digitTree = new TreeType();
+			digitTree = digit();
+			if(token == '#'){
+				factorTree = digitTree ;
+				return factorTree;
+			}
 			factorTree = digitTree;				
 		}
 		else if(token == '('){			
@@ -123,9 +135,8 @@ public class BuildTree {
 			factorTree = factor2Tree;
 		}
 		else{
-			factorTree = digitTree;
-		}
 
+		}
 		return factorTree;		
 	}
 
