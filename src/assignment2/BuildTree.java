@@ -125,7 +125,8 @@ public class BuildTree {
 			TreeType factor2Tree = new TreeType();
 			getToken();
 			factor2Tree = expression();
-			getToken();
+			if(token == ')')
+				getToken();
 			factorTree = factor2Tree;
 		}
 		else{
