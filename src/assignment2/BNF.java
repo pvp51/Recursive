@@ -2,39 +2,12 @@ package assignment2;
 
 import java.util.Scanner;
 
-public class BuildTree {
+public class BNF {
 	private static int position=0;
 	private static Object token;
 	private static String input;
 
-	public static Object getToken() {	
-		if(position < input.length()){
-
-			if(Character.isDigit(input.charAt(position))){
-				StringBuilder sb = new StringBuilder();
-				for (int i = position; i < input.length(); i++) {
-					if (input.substring(i, i + 1).matches("[0-9,.]")) {
-						sb.append(input.charAt(i));
-						continue;
-					}
-					position = i;
-					return token=sb.toString();
-				}
-				position = input.length();
-				return token=sb.toString();
-
-			}
-			else{
-				token = input.charAt(position);
-				position++;
-				return token;
-			}			
-		}
-		else{
-			token = '#';
-			return token;
-		}
-	}
+	
 
 	/*<expression> ::= <term> + <expression> | <term> - <expression> | <term>
     <term> ::= <factor> * <term> | <factor> / <term> | <factor>
@@ -50,10 +23,11 @@ public class BuildTree {
 		System.out.println("The input expression: "+input);		
 		getToken();		
 		TreeType finalTree = new TreeType();
-
+		System.out.println("Building the expression tree through recursive descent");
 		finalTree = expression();
+		System.out.println("Tree build completed, evaluating the tree by the recursive inorder traversal of the tree");
 		result = solveExpression(finalTree);
-		System.out.println(result);
+		System.out.println("The output of the expression: " +result);
 	}
 
 	private static Double solveExpression(TreeType finalTree) {
@@ -73,7 +47,6 @@ public class BuildTree {
 				}
 				return 0.0d;
 			}
-			//else if(finalTree.getData().toString().startsWith("[0-9]")){
 			else{
 				return Double.parseDouble((String) finalTree.getData());
 			}
@@ -155,7 +128,6 @@ public class BuildTree {
 				return factorTree;
 			}
 			factorTree = digitTree;
-
 		}
 		return factorTree;		
 	}
@@ -168,5 +140,32 @@ public class BuildTree {
 		digitTree.setLeft(null);
 		digitTree.setRight(null);
 		return digitTree;		
+	}
+	
+	public static Object getToken() {	
+		if(position < input.length()){
+			if(Character.isDigit(input.charAt(position))){
+				StringBuilder sb = new StringBuilder();
+				for (int i = position; i < input.length(); i++) {
+					if (input.substring(i, i + 1).matches("[0-9]")) {
+						sb.append(input.charAt(i));
+						continue;
+					}
+					position = i;
+					return token=sb.toString();
+				}
+				position = input.length();
+				return token=sb.toString();
+			}
+			else{
+				token = input.charAt(position);
+				position++;
+				return token;
+			}			
+		}
+		else{
+			token = '#';	//determines end of the string
+			return token;
+		}
 	}
 }
